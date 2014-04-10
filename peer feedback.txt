@@ -1,0 +1,9 @@
+Carl Gao, Shannon Zhu, Jesse Chen
+
+Are we going to have the users actually be able to input their data?
+
+Instead of circles, use progress bars, or bar graphs maybe.
+
+One bar that shows both exercise and food and how close you are to your goal for that day will be more intuitive than using a circle graph like originally planned.
+
+We don¡¯t want to deal with the extreme cases where someone might eat 2-3 times their expected number and then  it will mess up the visualization.

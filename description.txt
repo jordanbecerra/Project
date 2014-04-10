@@ -1,0 +1,6 @@
+bmi.html (calulation for the healthy number for that individual)
+fooddata.html (get the food data)
+peer feedback.txt (peer feedback on Tuesday)
+personal_data.html (personal data, try with "Jim" and the data is in the right format)
+projectData.csv (actually is the fooddata.csv, result of the fooddata.html)
+visualization.html (very basic visualization of one person one day, "Jim" 's data is in the right format and can put inside this visualization)
