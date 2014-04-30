@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="HealthTip">
+    <meta name="author" content="JiliHuang JordanBecerra">
+
+    <title>HealthTip</title>
+    <link rel="stylesheet" type="text/css" href="../css/HealthTipVis.css" />
+    <link href="../css/HealthTipStyle.css" rel="stylesheet">
+    <link href="../css/HealthTipSetup.css" rel="stylesheet">
+
+
+
+  </head>
+
+  <body role="document">
+
+    <div class="container theme-showcase" role="main">
+
+
+
+      <div class="jumbotron">
+        <h1>Health Tips</h1>
+        <p >Your personal health tracker </p>
+      </div>
+
+
+
+
+      <div class="page-header">
+        <h1>A Balance Between Health and Food</h1>
+      </div>
+
+      <p style="text-align:left;font-family:Helvetica Neue;font-size:16px;">
+        <br/>
+        This interactive website will keep track of the amount of exercise and food you do/intake for 30 days.The site will tell you whether you are at a good balance of exercise and food for each day. The actual amount of calories you intake while eating and burn while exercising will be compared to set goals for each day of the month. You can also compare the foods you eat with your friends.<br/>
+        <br/>
+      </p>
+      
+
+      <div style="vertical-align:middle; text-align:center">
+        <img src="../data/food-and-exercise.jpg">
+      </div>
+
+
+      <div class="button">
+        <p style="font-family:Adobe Caslon;font-style: italic;color:grey;font-size:28px;">Care yourself</p>
+        <p><a href="#" class="btn btn-primary btn-lg" role="button" onclick="return window.scrollBy(0,1075);">Start Now &raquo;</a></p>
+      </div>
+
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+
+
+
+
+
+      <div class="page-header">
+        <h1>Personal Statistics</h1>
+      </div>
+
+      <p style="text-align:left;font-family:Helvetica Neue;font-size:16px;">
+        <br/>
+       This donut visualization gives you a brief overview of the amount of calories you intake for each day. Each of the 30 individual segments gets it's size from the amount of calories you consumed that day. This overview may help you understand where you are slacking or going a little over the top in terms of calories. Click on a segment to get a more detailed look of the day of the calories you are intaking by eating and burning by exercising. The chart to the right of the donut compares your goals to your actual consumption, showing how you did for that day. It also gives the exact number of calories above the chart.
+       <br/>
+      </p>
+
+
+
+
+     <div>&nbsp;</div>
+     <div>&nbsp;</div>
+
+     <form>
+     <p style="font-family:Helvetica Neue;color:grey;font-size:20px;">&nbsp;&nbsp;Select A User :
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <select name="jumpmenu" onChange="jumpto(value)">
+                <option value ="Anirudh">Anirudh</option>
+                <option value ="Anran">Anran</option>
+                <option value ="Anne">Anne</option>         
+                <option value ="Brittany">Brittany</option>
+                <option value ="Bernd">Bernd</option>
+                <option value ="Claud">Claud</option>
+                <option value ="Eliott">Eliott</option>
+                <option value ="Heamin">Heamin</option>
+                <option value ="HyeSoo">HyeSoo</option>
+                <option value ="Jim">Jim</option>
+                <option value ="James">James</option>
+                <option value ="Jordan">Jordan</option>
+                <option value ="Jili">Jili</option>
+                <option value ="Kyeore">Kyeore</option>
+                <option value ="Klarke">Klarke</option>
+                <option value ="Ling">Ling</option>
+                <option value ="Lynn">Lynn</option>
+                <option value ="Qi">Qi</option>
+                <option value ="Ricardo">Ricardo</option>
+                <option value ="Sam">Sam</option>
+                <option value ="Sukreet">Sukreet</option>
+                <option value ="Xing">Xing</option>
+          </select>
+      </p>
+     </form>
+     
+
+     <p><a href="#" class="btn btn-primary btn-lg" role="button" onclick="return window.scrollBy(0,1175);">Friends' Status &raquo;</a></p>
+
+
+     <table>
+         <tr>
+            <td><div id="donutChart"></div></td>          
+            <td>
+              <div id="textBox"></div>
+              <div>&nbsp;</div>
+              <div id="statisticBarChart"></div>
+            </td>                         
+         <tr/>
+     </table>
+
+
+     <div>&nbsp;</div>
+     <div>&nbsp;</div>
+
+
+      <div class="page-header">
+        <h1>Friends' Status</h1>
+      </div>
+
+
+      <p style="text-align:left;font-family:Helvetica Neue;font-size:16px;">
+        <br/>
+       This visual relation chart is meant for comparing the types of food you eat to the types of foods your friends eat. Hover over a certain food to see which of your friends has eaten that food in the past 30 days or hover over a friend's name to see which foods they have consumed in the past 30 days. 
+       <br/>
+      </p>
+
+     <div>&nbsp;</div>
+     <div>&nbsp;</div>
+
+     <p><a href="#" class="btn btn-primary btn-lg" role="button" onclick="return window.scrollBy(0,-2150);">Back to Top &raquo;</a></p>
+
+     <table>
+         <tr>
+            <td><div id="relationNet"></div></td>
+            <td>
+              <div id="foodChart"></div>
+            </td>  
+         </tr>
+
+     </table>
+
+
+     <div>&nbsp;</div>
+     <div>&nbsp;</div>
+      <div>&nbsp;</div>
+     <div>&nbsp;</div>
+
+
+      <div class="well">
+        <p>Reference</p>
+        <p>"Bilevel Partition." Bilevel Partition. N.p., n.d. Web. 29 Apr. 2014.  http://bl.ocks.org/mbostock/5944371</p>
+        <p>Team, Guardian US Interactive, Feilding Cage, Gabriel Dance, and Greg Chen. "Violence and Guns in Best-selling Video Games – interactive." Theguardian.com. Guardian News and Media, 30 Apr. 2013. Web. 29 Apr. 2014.  http://www.theguardian.com/world/interactive/2013/apr/30/violence-guns-best-selling-video-games</p>
+        <p>"Sequences Sunburst." Sequences Sunburst. N.p., n.d. Web. 29 Apr. 2014.  http://bl.ocks.org/kerryrodden/7090426</p>
+      </div>
+
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="HealthTip.js"></script>
+
+  </body>
+  <footer>© 2014 - Jili Huang and Jordan Becerra</footer>
+</html>
