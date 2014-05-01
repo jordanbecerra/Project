@@ -16,3 +16,5 @@ data- The data folder contains all of the stuff relating to data, including the 
 		
 		
 Link for website: https://googledrive.com/host/0B3U8e5FVgwbRQkhzMFZOZUs0Sjg/HealthTipgoogle%20ver.html
+
+Link for Vimeo: https://vimeo.com/93521229
