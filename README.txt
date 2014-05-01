@@ -13,3 +13,6 @@ data- The data folder contains all of the stuff relating to data, including the 
 		fooddata.html- This is where we scraped the website to make the csv file.
 		personal_data.html- the script where we call the personal_data.js
 		personal_data.js-the main file where we did all of the data crunching
+		
+		
+Link for website: https://googledrive.com/host/0B3U8e5FVgwbRQkhzMFZOZUs0Sjg/HealthTipgoogle%20ver.html
