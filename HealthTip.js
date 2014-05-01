@@ -1326,6 +1326,7 @@ function barChartUpdate()
 function mouseovered(d) {
 
   if(d.size != 4000) foodDes(d);
+  else userDes(d);
 
 
  link
@@ -1441,4 +1442,33 @@ CalorieForm.selectAll("tr").style("background-color",function(d,j){
                        }
                      });
 
+}
+
+
+
+function userDes(d){
+
+  var foodChartTr = CalorieForm.selectAll("tr")[0];
+  var index = [];
+  
+  for(var i=0;i<CalorieForm.selectAll("tr")[0].length-1; i++){
+    for(var j=0;j<d.imports.length; j++){
+  
+     if(d.imports[j] == CalorieForm.selectAll("tr")[0][i].__data__.FoodItem) index.push(i);
+   }
+
+}
+
+
+
+CalorieForm.selectAll("tr").style("background-color",function(d,j){
+                     console.log(index);
+                     console.log(j)
+                     if(index.indexOf(j)> -1)return "#ffb346";
+                       else {
+                        if (j%2==0){return "#efefef";}
+                        else{return "#c4c4c4";}
+                       }
+
+                     });
 }
