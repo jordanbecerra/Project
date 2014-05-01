@@ -21,9 +21,17 @@ var detailVis = d3.select("#statisticBarChart").append("svg").attr({
                    height:375
                  })
 
+var imageVis = d3.select("#imageBox").append("svg").attr({
+                   width:400,
+                   height:200
+                 })
+
+var alertAll = d3.select("#alert").append("div");
+
+
 var textVis = d3.select("#textBox").append("svg").attr({
                    width:600,
-                   height:375
+                   height:100,
                  })
 
 var CalorieForm = d3.select("#foodChart").append("table").attr({
@@ -165,15 +173,6 @@ d3.json("../data/relationNetDataset.json", function(error, classes) {
 
 
 
-
-
-
-
-
-
-
-
-
 //Food Chart
 function loadFoodChart(classes) {
 
@@ -229,27 +228,6 @@ d3.csv("../data/projectData.csv", function(error, data){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Donut Chart Visualization
 
 
@@ -293,7 +271,8 @@ function DonutRender (data,root){
 
 
   var center = svg.append("circle")
-      .attr("r", 30)
+      .attr("r", 130)
+      .attr("id","commandCenter")
       .on("click", zoomOut);
 
   center.append("title")
@@ -302,6 +281,7 @@ function DonutRender (data,root){
   svg.append("text")
          .attr("id", "textCenter")
          .attr("text-anchor", "middle")
+         .attr("y", -25)
          .attr("font-family", "Helvetica Neue")
          .style("font-size", "56px")
          .text(root.name);
@@ -309,11 +289,12 @@ function DonutRender (data,root){
 
       svg.append("text")
          .attr("id", "textCenter")
-         .attr("x", -160)
-         .attr("y", 75)
-         .attr("font-family", "Helvetica Neue")
-         .style("font-size", "34px")
-         .text("30 Day" + " Health Status");
+          .style("text-anchor", "middle")
+          .attr("y", 55)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "34px")
+          .text("30 Day" + " Health Status");
 
   var path = svg.selectAll("path")
       .data(partition.nodes(root).slice(1))
@@ -333,7 +314,7 @@ function DonutRender (data,root){
 
                           function zoomIn(p) {
 
-
+                          var stepCommand = 1;
 
                             if (p.depth > 1){
                               p = p.parent;
@@ -435,11 +416,12 @@ function DonutRender (data,root){
                         }
                         
                         function fill(d) {
+
+                          
                           var color = d3.scale.linear()
-                            .domain([0, 3000])
-                            .range(["white", "black"]);
-                        
-                        
+                            .domain([1, 30])
+                            .range(["#dedef4","#333342"]);
+                                             
                         
                         if(d.name == "exercise" ||d.name == undefined) return "#4690ff";
                         else if(d.name == "food") return "#ffb346";
@@ -447,10 +429,15 @@ function DonutRender (data,root){
                         else if(d.name == "lunch") return "#ffc36e";
                         else if(d.name == "dinner") return "#ffd394";
                         else if(d.name == "other") return "#ffe3bc";
-                        else{ return "#8484a8";
-                        
-                        }}
-                        
+                        else if(d.name.charAt(0) != "D") return "#8484a8";
+                        else{ 
+                          return color(d.name.charAt(3)+d.name.charAt(4));
+                        }
+                      }
+
+     
+
+
                         function arcTween(b) {
                           var i = d3.interpolate(this._current, b);
                           this._current = i(0);
@@ -463,7 +450,9 @@ function DonutRender (data,root){
                           return {depth: d.depth, x: d.x, dx: d.dx};
                         }
 
-}
+       }
+
+
 
 
 
@@ -472,6 +461,8 @@ function DonutRender (data,root){
 
 
 function mouseover(d) {
+
+  if(d.depth == 1){
 
    removeCenterText();
 
@@ -485,58 +476,95 @@ function mouseover(d) {
    svg.append("text")
       .attr("id", "textCenter")
       .attr("text-anchor", "middle")
+      .attr("y", -25)
       .attr("font-family", "Helvetica Neue")
       .style("font-size", "56px")
-      .style("fill","grey")
-      .text(d.parent.name);
+      .text(d.name);
 
 
   if(d.children && d.children.length == 2){
         svg.append("text")
            .attr("id", "textCenter")
-           .attr("x", -160)
-           .attr("y", 75)
+           .style("text-anchor", "middle")
+           .attr("y", 55)
            .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
            .style("font-size", "34px")
-           .text(d.name + " Health Status");
+           .text(d.sum + " calories");
+
+svg.append("text")
+           .attr("id", "textCenter")
+           .style("text-anchor", "middle")
+           .attr("y", 95)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "14px")
+           .text("click to show detail");
+
+
 
         barHighlight(d);   
      }
 
   else if(d.children && d.children.length == 1){
+
         svg.append("text")
            .attr("id", "textCenter")
-           .attr("x", -65)
-           .attr("y", 75)
+           .style("text-anchor", "middle")
+           .attr("y", 55)
            .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
            .style("font-size", "34px")
-           .text(d.name);
+           .text(d.value +" calories");
+
+        svg.append("text")
+           .attr("id", "textCenter")
+           .style("text-anchor", "middle")
+           .attr("y", 95)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "14px")
+           .text("click to show detail");
      }
 
   else if(d.children && d.children.length == 4){
      svg.append("text")
         .attr("id", "textCenter")
-        .attr("x", -45)
-        .attr("y", 75)
-        .attr("font-family", "Helvetica Neue")
-        .style("font-size", "34px")
-        .text(d.name);
+           .style("text-anchor", "middle")
+           .attr("y", 55)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "34px")
+           .text(d.value +" calories");
+
+       svg.append("text")
+           .attr("id", "textCenter")
+           .style("text-anchor", "middle")
+           .attr("y", 95)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "14px")
+           .text("click to show detail");
   }
   else if(d.name){
      svg.append("text")
         .attr("id", "textCenter")
-        .attr("x", -65)
-        .attr("y", 75)
-        .attr("font-family", "Helvetica Neue")
-        .style("font-size", "34px")
-        .text(d.name);
+           .style("text-anchor", "middle")
+           .attr("y", 55)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "34px")
+           .text(d.value +" calories");
   }
-      
+ }
 }
 
 
 
 function mouseleave(d) {
+
+  
+  if(d.depth == 1){
 
    removeCenterText();
    barHighlightOff();
@@ -547,6 +575,7 @@ function mouseleave(d) {
       svg.append("text")
          .attr("id", "textCenter")
          .attr("text-anchor", "middle")
+         .attr("y", -25)
          .attr("font-family", "Helvetica Neue")
          .style("font-size", "56px")
          .text(d.parent.name);
@@ -554,13 +583,131 @@ function mouseleave(d) {
    if(d.children && d.children.length == 2){
         svg.append("text")
            .attr("id", "textCenter")
-           .attr("x", -160)
-           .attr("y", 75)
-           .attr("font-family", "Helvetica Neue")
-           .style("font-size", "34px")
-           .text("30 Day" + " Health Status");
+          .style("text-anchor", "middle")
+          .attr("y", 55)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "34px")
+          .text("30 Day" + " Health Status");
      }
 
+     
+else if(d.name == "exercise" || d.name == "food"){
+  var percentageExD = 100* d.parent.children[1].value/d.parent.value;
+  var percentageEx = percentageExD.toFixed(2);
+  var percentageFoodD =100* d.parent.children[0].value/d.parent.value;
+  var percentageFood = percentageFoodD.toFixed(2);
+
+       svg.append("text")
+           .attr("id", "textCenter")
+          .style("text-anchor", "middle")
+          .attr("y", 28)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "28px")
+          .text("exercise : " + percentageEx +" %");
+
+       svg.append("text")
+          .attr("id", "textCenter")
+          .style("text-anchor", "middle")
+          .attr("y", 63)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "28px")
+          .text("food :  " + percentageFood +" %");
+
+        svg.append("text")
+           .attr("id", "textCenter")
+           .style("text-anchor", "middle")
+           .attr("y", 95)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "14px")
+           .text("click to zoom back");
+    }
+
+
+else if(d.name == "breakfast" || d.name == "lunch" || d.name == "dinner" || d.name == "other"){
+
+  var percentageBrD = 100* d.parent.children[0].value/d.parent.value;
+  var percentageBr = percentageBrD.toFixed(2);
+  var percentageluD = 100* d.parent.children[1].value/d.parent.value;
+  var percentagelu = percentageluD.toFixed(2);
+  var percentageDiD = 100* d.parent.children[2].value/d.parent.value;
+  var percentageDi = percentageDiD.toFixed(2);
+  var percentageOtD = 100* d.parent.children[3].value/d.parent.value;
+  var percentageOt = percentageOtD.toFixed(2);
+
+
+       svg.append("text")
+           .attr("id", "textCenter")
+          .style("text-anchor", "middle")
+          .attr("y", 25)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "16px")
+          .text("breakfast : " + percentageBr +" %");
+
+       svg.append("text")
+          .attr("id", "textCenter")
+          .style("text-anchor", "middle")
+          .attr("y", 40)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "16px")
+          .text("lunch :  " + percentagelu +" %");
+
+       svg.append("text")
+           .attr("id", "textCenter")
+          .style("text-anchor", "middle")
+          .attr("y", 55)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "16px")
+          .text("dinner : " + percentageDi +" %");
+
+       svg.append("text")
+          .attr("id", "textCenter")
+          .style("text-anchor", "middle")
+          .attr("y", 70)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "16px")
+          .text("other :  " + percentageOt +" %");
+
+        svg.append("text")
+           .attr("id", "textCenter")
+           .style("text-anchor", "middle")
+           .attr("y", 95)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "14px")
+           .text("click to zoom back");
+    }
+    else{
+
+      svg.append("text")
+           .attr("id", "textCenter")
+          .style("text-anchor", "middle")
+          .attr("y", 55)
+          .attr("font-family", "Helvetica Neue")
+          .style("fill","grey")
+          .style("font-size", "34px")
+          .text(d.cal +" calories");
+
+      svg.append("text")
+           .attr("id", "textCenter")
+           .style("text-anchor", "middle")
+           .attr("y", 95)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "14px")
+           .text("click to zoom back");
+    }
+
+
+
+  } 
 }
 
 function removeCenterText()
@@ -573,19 +720,16 @@ function removeCenterText()
 
 
 
-
-
-
 // Text Box Function
 
 
 function defaultTextID(d)
     {
 
-      textVis.append("text")
+      imageVis.append("text")
              .attr("id", "textID")
              .attr("x", 60)
-             .attr("y", 220)
+             .attr("y", 190)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("fill","grey")
@@ -594,7 +738,7 @@ function defaultTextID(d)
       
 
 
-    var img = textVis.append("svg:image")
+    var img = imageVis.append("svg:image")
                       .attr("id", "textID")
 			              	.attr("xlink:href", "../data/"+d.name+".jpg")
 			              	.attr("width", 150)
@@ -608,16 +752,37 @@ function defaultTextID(d)
 function defaultText(d)
     {
 
+
+var alertVis = alertAll.append("svg").attr({
+                   width:500,
+                   height:15
+                 })
+
+
+     alertVis.attr("class","alert alert-info")
+             .attr("id", "text2")
+             .append("text")
+             .attr("x", 40)
+             .attr("y", 10)
+             .style("fill","#31708f")
+             .style("font-weight","bold")
+             .text("Information  ");
+
+     alertVis.append("text")
+             .attr("x", 150)
+             .attr("y", 10)
+             .style("fill","#31708f")
+             .text("This is your general performance in 30 days"); 
+             
       textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 245)
+             .attr("y", 25)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
              .text("Goal Calorie Surplus (avg):" + " " + "400.00" + " cal"); 
 
-             console.log(d.children);
 var numDD=0;
 
 for(i=0;i<d.children.length;i++){
@@ -625,22 +790,21 @@ for(i=0;i<d.children.length;i++){
   numDD+=d.children[i].sum;
 }
 
-console.log(numDD);
-
-
-
 var num = numDD/30;    
 var avg = num.toFixed(2)
 
       textVis.append("text")
          .attr("id", "text2")
          .attr("x", 60)
-         .attr("y", 270)
+         .attr("y", 50)
          .attr("font-family", "Helvetica Neue")
          .attr("text-anchor", "center")
          .style("font-size", "18px")
          .text("Actual Calorie Surplus (avg):" + " " + avg + " cal");
     }
+
+
+
 
 
 function insertText(d)
@@ -649,7 +813,7 @@ function insertText(d)
      textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 245)
+             .attr("y", 25)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
@@ -659,7 +823,7 @@ function insertText(d)
      textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 270)
+             .attr("y", 50)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
@@ -669,7 +833,7 @@ function insertText(d)
       textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 295)
+             .attr("y", 75)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
@@ -679,12 +843,96 @@ function insertText(d)
      textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 320)
+             .attr("y", 100)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
-             .text("Food Actual" + " (" + d.name + ") :" + d.children[0].value.toFixed(2) + " cal");           
+             .text("Food Actual" + " (" + d.name + ") :" + d.children[0].value.toFixed(2) + " cal");     
+
+
+      var realSurplus =   d.children[0].value.toFixed(2) -   d.children[1].value.toFixed(2);
+      
+      if(realSurplus<600) alertMod1();
+      else if(realSurplus>=600 && realSurplus<900) alertMod2(); 
+      else  alertMod3();   
     }
+
+function alertMod1(){
+
+  var alertVis = alertAll.append("svg").attr({
+                   width:500,
+                   height:15
+                 })
+
+alertVis.attr("class","alert alert-success")
+             .attr("id", "text2")
+             .append("text")
+             .attr("x", 40)
+             .attr("y", 10)
+             .style("fill","#3c763d")
+             .style("font-weight","bold")
+             .text("Well done!  ");
+
+     alertVis.append("text")
+             .attr("id", "text2")
+             .attr("x", 150)
+             .attr("y", 10)
+             .style("fill","#3c763d")
+             .text("You successfully keep yourself healthy."); 
+
+}
+
+function alertMod2(){
+
+  var alertVis = alertAll.append("svg").attr({
+                   width:500,
+                   height:15
+                 })
+
+alertVis.attr("class","alert alert-warning")
+             .attr("id", "text2")
+             .append("text")
+             .attr("x", 40)
+             .attr("y", 10)
+             .style("fill","#8a6d3b")
+             .style("font-weight","bold")
+             .text("Warning!  ");
+
+     alertVis.append("text")
+             .attr("id", "text2")
+             .attr("x", 150)
+             .attr("y", 10)
+             .style("fill","#8a6d3b")
+             .text("Better check for yourself, you're not looking too good."); 
+
+}
+
+
+function alertMod3(){
+
+  var alertVis = alertAll.append("svg").attr({
+                   width:500,
+                   height:15
+                 })
+
+alertVis.attr("class","alert alert-danger")
+             .attr("id", "text2")
+             .append("text")
+             .attr("x", 40)
+             .attr("y", 10)
+             .style("fill","#a94442")
+             .style("font-weight","bold")
+             .text("Oh snap!  ");
+
+     alertVis.append("text")
+             .attr("id", "text2")
+             .attr("x", 150)
+             .attr("y", 10)
+             .style("fill","#a94442")
+             .text("Hurry to make adjustment before it is too late."); 
+
+}
+
 
 
     function insertTextFoodDetail(d)
@@ -695,7 +943,7 @@ function insertText(d)
       textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 245)
+             .attr("y", 25)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
@@ -707,7 +955,7 @@ function insertText(d)
       textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 245)
+             .attr("y", 25)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
@@ -717,7 +965,7 @@ function insertText(d)
      textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 270)
+             .attr("y", 50)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
@@ -727,7 +975,7 @@ function insertText(d)
       textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 295)
+             .attr("y", 75)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
@@ -737,7 +985,7 @@ function insertText(d)
      textVis.append("text")
              .attr("id", "text2")
              .attr("x", 60)
-             .attr("y", 320)
+             .attr("y", 100)
              .attr("font-family", "Helvetica Neue")
              .attr("text-anchor", "center")
              .style("font-size", "18px")
@@ -798,7 +1046,12 @@ detailVis.append("g")
          .attr("id", "barChartVis2")
          .attr("class", "x axis")
          .attr("transform", "translate(0," + 2.5*height + ")")
-         .call(xAxis);
+         .call(xAxis)
+         .append("text")
+         .style("text-anchor", "start")
+         .attr("transform", "translate(500,20)")
+         .style("font-size", "16px")
+         .text("Days");
 
 detailVis.append("g")
       .attr("id", "barChartVis2")
@@ -829,24 +1082,126 @@ detailVis.selectAll(".bar")
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 function mouseoverSecondary (d) {
+
+  removeCenterText();
 
  d3.selectAll(".bar")
       .style("opacity", 0.3);
  
    d3.select(this)
        .style("opacity", 1);
+
+
+  var dayID = "Day" + d.name;
+  var userID =  d3.selectAll("#donut")[0][0].__data__.parent.name;
+
+
+   d3.selectAll("#donut").style("opacity",function(d){
+     if(d.name != dayID)return 0.3;
+      else return 1;
+   });
+
+
+   svg.append("text")
+      .attr("id", "textCenter")
+      .attr("text-anchor", "middle")
+      .attr("y", -25)
+      .attr("font-family", "Helvetica Neue")
+      .style("font-size", "56px")
+      .text(userID);
+
+
+
+        svg.append("text")
+           .attr("id", "textCenter")
+           .style("text-anchor", "middle")
+           .attr("y", 55)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "34px")
+           .text(d.value + " calories");
 }
 
 
 
 function mouseleaveSecondary (d) {
 
+  removeCenterText();
+
     d3.selectAll(".bar")
       .style("opacity", 1);
-  
+
+      d3.selectAll("#donut").style("opacity",1);
+
+var userID =  d3.selectAll("#donut")[0][0].__data__.parent.name;
+
+      svg.append("text")
+      .attr("id", "textCenter")
+      .attr("text-anchor", "middle")
+      .attr("y", -25)
+      .attr("font-family", "Helvetica Neue")
+      .style("font-size", "56px")
+      .text(userID);
+
+
+        svg.append("text")
+           .attr("id", "textCenter")
+           .style("text-anchor", "middle")
+           .attr("y", 55)
+           .attr("font-family", "Helvetica Neue")
+           .style("fill","grey")
+           .style("font-size", "34px")
+           .text("30 Day" + " Health Status");
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -874,6 +1229,8 @@ function barHighlightOff () {
                .style("opacity", 1);
 
 }
+
+
 
 
 
@@ -964,15 +1321,6 @@ function barChartUpdate()
 
 
 
-
-
-
-
-
-
-
-
-
 // Part 2 Visualization Function
 
 function mouseovered(d) {
@@ -1006,7 +1354,6 @@ function mouseovered(d) {
 function mouseouted(d) {
 
   zebra();
-
   link
       .classed("link--target", false)
       .classed("link--source", false);
@@ -1016,9 +1363,6 @@ function mouseouted(d) {
       .classed("node--source", false);
 }
 
-//d3.select(self.frameElement).style("height", diameter + "px");
-
-// Lazily construct the package hierarchy from class names.
 function packageHierarchy(classes) {
   var map = {};
 
@@ -1088,8 +1432,6 @@ for(var i=0;i<CalorieForm.selectAll("tr")[0].length-1; i++){
    if(d.name == CalorieForm.selectAll("tr")[0][i].__data__.FoodItem) index = i;
 
  }
-console.log(index);
-
 
 CalorieForm.selectAll("tr").style("background-color",function(d,j){
                        if(j == index)return "#ffb346";
